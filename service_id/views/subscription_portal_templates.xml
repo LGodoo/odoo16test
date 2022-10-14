@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>   
+       <template id="subscription_portal_service_id" inherit_id="sale_subscription.subscription">
+            <xpath expr='//thead[@class="bg-100"]/tr/th' position="after">  
+                <th>Service ID</th>
+           </xpath>
+
+           <xpath expr='//td[@class="line-description"]' position="after">  
+                <td class="line-description"><span t-field="line.service_id"/></td>
+            </xpath>
+        </template>
+    </data>
+</odoo>

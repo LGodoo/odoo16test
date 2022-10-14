@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <template id="report_invoice_with_payments" inherit_id="account.report_invoice_document">
+            <xpath expr='//th[@name="th_description"]' position="after">  
+                <th name="th_service_id" class="text-left"><span>Service ID</span></th>
+            </xpath>
+
+            <xpath expr='//td[@name="account_invoice_line_name"]' position="after">  
+                <td name="account_invoice_line_service_id"><span t-field="line.service_id_invoice"/></td>
+            </xpath>
+        </template>
+    </data>
+</odoo>
+
+                        

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+  <data>
+    <record id="sale_sub_service_id_form" model="ir.ui.view">
+        <field name="name">Service ID</field>
+        <field name="model">sale.subscription</field>
+        <!--<field name="type">form</field>-->
+        <field name="inherit_id" ref="sale_subscription.sale_subscription_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/div[1]/button[@class='oe_stat_button']" position="before">
+                <button class="oe_stat_button"
+                    icon="fa-info"
+                    name="action_service_ids"
+                    type="object">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Service</span>
+                        <span class="o_stat_text">Ids</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//form/sheet/div[4]/notebook/page/div/field/tree/field[@name='quantity']" position="before">
+                <field name="service_id"/>
+            </xpath>
+        </field>
+    </record>
+      
+
+    <record id="invoice_sub_service_id_form" model="ir.ui.view">
+        <field name="name">Service ID</field>
+        <field name="model">account.move</field>
+        <!--<field name="type">form</field>-->
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook[1]/page[1]/field/tree/field[@name='name']" position="after">
+                <field name="service_id_invoice"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook[1]/page[1]/field/form//field[@name='analytic_account_id']" position="before">
+                <field name="service_id_invoice"/>
+            </xpath>
+        </field>
+    </record>
+      
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">Service ID</field>
+        <field name="model">product.template</field>
+        <!--<field name="type">form</field>-->
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook[1]/page[4]" position="after">
+
+                <page string="Service ID Options" name="Service IDs" attrs="{'invisible':[('recurring_invoice', '!=', True)]}">
+                    <group name="Service IDs">
+                        <group name="service_id_internet" string="Technical Details" attrs="{'invisible': [('type', 'not in', ['product', 'service'])]}">
+                            <label for="modem_display" attrs="{'invisible':[('product_variant_count', '>', 1), ('is_product_variant', '=', False)]}"/>
+                            <div class="o_row" name="modem_display" attrs="{'invisible':[('product_variant_count', '>', 1), ('is_product_variant', '=', False)]}">
+                                <field name="modem_display"/>
+                            </div>
+                            <label for="static_ip_display" attrs="{'invisible':[('product_variant_count', '>', 1), ('is_product_variant', '=', False)]}"/>
+                            <div class="o_row" name="static_ip_display" attrs="{'invisible':[('product_variant_count', '>', 1), ('is_product_variant', '=', False)]}">
+                                <field name="static_ip_display"/>
+                            </div>
+                            <label for="portability_number_display" attrs="{'invisible':[('product_variant_count', '>', 1), ('is_product_variant', '=', False)]}"/>
+                            <div class="o_row" name="portability_number_display" attrs="{'invisible':[('product_variant_count', '>', 1), ('is_product_variant', '=', False)]}">
+                                <field name="portability_number_display"/>
+                            </div>                            
+                        </group>
+                    </group>   
+                </page>
+            </xpath>
+                
+        </field>
+    </record>      
+      
+      
+  </data>
+</odoo>
