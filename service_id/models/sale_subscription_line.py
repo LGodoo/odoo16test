@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import api, fields, models, Command, _, SUPERUSER_ID
 import logging
 import traceback
+from odoo.exceptions import UserError, ValidationError
+
 
 _logger = logging.getLogger(__name__)
 
@@ -11,33 +13,21 @@ class SaleSubscriptionLine(models.Model):
     _inherit = 'sale.subscription.line'
     
     service_id = fields.Many2one(
-    'sale.service.details', string='Service ID')
+    'sale.service.details', string='Service ID',  tracking=True)
     
     
 
-    
-    @api.onchange('service_id.portability_number')
-    def onchange_portability_number(self):
-        if not self.service_id.portability_number:
-            return
-        else:
-            old_name = self.name
-            port_num_start = self.name.find('\n(PAC:')
-            port_num_end = self.name.find(')', port_num_start, port_num_start + 16)
-            old_portability_number = self.name[port_num_start: port_num_end + 1]
-            _logger.error("Found PUK at: %s and ends at: %s being: %s", port_num_start, port_num_end, old_portability_number)
-            
-        
-            self.name = old_name.replace(old_portability_number, '')
-            
-            
-            comment = "\n(PAC: "
-            self.name += comment + self.service_id.portability_number + ')'
 
             
     @api.onchange('service_id')
     def onchange_service_id(self):
-        self.onchange_portability_number()
+        service_ids_exists = self.env['sale.service.details'].search([('id', '=', self.service_id.ids)])
+        
+        if len(service_ids_exists) != 0:
+            if service_ids_exists.subscription_id:
+                raise ValidationError(_('Douplicate Service ID: %s - Subscription: %s', service_ids_exists.name, service_ids_exists.subscription_id.display_name))
+            
+
 
     @api.model
     def create(self, values):
